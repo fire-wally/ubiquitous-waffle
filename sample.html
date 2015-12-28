@@ -8,11 +8,14 @@
 <body>
 	<h1>Human Center of Mass</h1>
 
-	This is a web page
+	<p>Click the button to choose an image from your computer</p>
 
 	<label for="loadButton">Image File:</label>
 	<input type="file" id="loadButton" name="loadButton" />
-	<canvas id="imageCanvas"></canvas>
+
+	<div id="wrapper">
+		<canvas id="imageCanvas"></canvas>
+	</div>
 	<script type="text/javascript">
 
 		var loadButton = document.getElementById('loadButton');

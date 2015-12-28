@@ -31,12 +31,23 @@
 	<div id="wrapper">
 		<canvas id="imageCanvas"></canvas>
 	</div>
+
+	<button id="saveButton">Save</button>
+
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
+	<script type="text/javascript" src="blob.js"></script>
+	<script type="text/javascript" src="canvas-toblob.js"></script>
+	<script type="text/javascript" src="filesaver.js"></script>
+
 	<script type="text/javascript">
 
 		var loadButton = document.getElementById('loadButton');
 	    loadButton.addEventListener('change', handleImage, false);
+
+	    var saveButton = document.getElementById('saveButton');
+	    saveButton.addEventListener('click', saveImage, false);
+
 		var canvas = document.getElementById('imageCanvas');
 		var ctx = canvas.getContext('2d');
 
@@ -64,6 +75,12 @@
 		        img.src = event.target.result;
 		    }
 		    reader.readAsDataURL(e.target.files[0]);
+		}
+
+		function saveImage(e){
+			canvas.toBlob(function(blob) {
+				saveAs(blob, "center-of-mass.png");
+			});
 		}
 
 	</script>

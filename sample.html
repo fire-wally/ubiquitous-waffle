@@ -1,11 +1,39 @@
 <html>
 <head>
 	<title>Human Center of Mass</title>
+	<style>
+
+	</style>
 </head>
 <body>
 	<h1>Human Center of Mass</h1>
 
 	This is a web page
 
+	<label for="loadButton">Image File:</label>
+	<input type="file" id="loadButton" name="loadButton" />
+	<canvas id="imageCanvas"></canvas>
+	<script type="text/javascript">
+
+		var loadButton = document.getElementById('loadButton');
+	    loadButton.addEventListener('change', handleImage, false);
+		var canvas = document.getElementById('imageCanvas');
+		var ctx = canvas.getContext('2d');
+
+
+		function handleImage(e){
+		    var reader = new FileReader();
+		    reader.onload = function(event){
+		        var img = new Image();
+		        img.onload = function(){
+		            canvas.width = 800;
+		            canvas.height = 600;
+		            ctx.drawImage(img,0,0, 800, 600);
+		        }
+		        img.src = event.target.result;
+		    }
+		    reader.readAsDataURL(e.target.files[0]);     
+		}
+	</script>
 </body>
 </html>

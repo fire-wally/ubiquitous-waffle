@@ -19,7 +19,9 @@
 
 	<button id="saveButton">Save</button>
 
-	<script type="text/javascript" src="canvas2image.js"></script>
+	<script type="text/javascript" src="blob.js"></script>
+	<script type="text/javascript" src="canvas-toblob.js"></script>
+	<script type="text/javascript" src="filesaver.js"></script>
 	<script type="text/javascript">
 
 		var loadButton = document.getElementById('loadButton');
@@ -58,7 +60,9 @@
 		}
 
 		function saveImage(e){
-			Canvas2Image.saveAsPNG(canvas, canvas.width, canvas.height);
+			canvas.toBlob(function(blob) {
+				saveAs(blob, "center-of-mass.png");
+			});
 		}
 
 	</script>

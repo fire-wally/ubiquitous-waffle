@@ -64,21 +64,15 @@ function connectTheDots(dot1, dot2){
   allLines.push(line);
 }
 
-function stageClick(evt){
+function makeACircle(x, y, connectToPrevious){
   // Add a circle at the point of user click
-
-  var coordinate = Coordinate();
-  coordinate.x = evt.stageX;
-  coordinate.y = evt.stageY;
-  allCoordinates.push(coordinate);
-
   var circle = new createjs.Shape();
   circle.graphics.beginFill("red").drawCircle(0, 0, 4);
-  circle.x = coordinate.x;
-  circle.y = coordinate.y;
+  circle.x = x;
+  circle.y = y;
 
   // connect this circle to the previous circle with a line.
-  if (allCircles.length > 0){
+  if (allCircles.length > 0 && connectToPrevious){
     connectTheDots(allCircles[allCircles.length - 1], circle);
   }
 
@@ -86,5 +80,16 @@ function stageClick(evt){
 
   stage.addChild(circle); // add to stage
   stage.update(); // show the new circle
+}
+
+function stageClick(evt){
+
+  var coordinate = Coordinate();
+  coordinate.x = evt.stageX;
+  coordinate.y = evt.stageY;
+  allCoordinates.push(coordinate);
+
+  makeACircle(evt.stageX, evt.stageY, true); // this last boolean draws a line to previous circle
+
 }
 stage.on("stagemousedown", stageClick);

@@ -41,19 +41,50 @@ function saveImage(e){
   });
 }
 
-var easelElements = {};
-function setupCanvas(){
-    //Create a stage by getting a reference to the canvas
-    stage = new createjs.Stage("demoCanvas");
-    //Create a Shape DisplayObject.
-    circle = new createjs.Shape();
-    circle.graphics.beginFill("red").drawCircle(0, 0, 40);
-    //Set position of Shape instance.
-    circle.x = circle.y = 50;
-    //Add Shape instance to stage display list.
-    stage.addChild(circle);
-    //Update stage will render next frame
-    stage.update();
-    easelElements['stage'] = stage;
+function Coordinate(){
+  return {x:0,y:0}
 }
-setupCanvas();
+
+var stage = new createjs.Stage("imageCanvas");
+var allCoordinates = [];
+var allCircles = [];
+var allLines = [];
+
+function connectTheDots(dot1, dot2){
+  console.log(dot1.x);
+  console.log(dot2.x);
+
+  var line = new createjs.Shape();
+  line.graphics.beginStroke("blue")
+  line.graphics.moveTo(dot1.x, dot1.y);
+  line.graphics.lineTo(dot2.x, dot2.y);
+  stage.addChild(line); // add to stage
+  stage.update(); // show the new circle
+
+  allLines.push(line);
+}
+
+function stageClick(evt){
+  // Add a circle at the point of user click
+
+  var coordinate = Coordinate();
+  coordinate.x = evt.stageX;
+  coordinate.y = evt.stageY;
+  allCoordinates.push(coordinate);
+
+  var circle = new createjs.Shape();
+  circle.graphics.beginFill("red").drawCircle(0, 0, 4);
+  circle.x = coordinate.x;
+  circle.y = coordinate.y;
+
+  // connect this circle to the previous circle with a line.
+  if (allCircles.length > 0){
+    connectTheDots(allCircles[allCircles.length - 1], circle);
+  }
+
+  allCircles.push(circle) // add circle to list of circles so we can connect the dots later
+
+  stage.addChild(circle); // add to stage
+  stage.update(); // show the new circle
+}
+stage.on("stagemousedown", stageClick);

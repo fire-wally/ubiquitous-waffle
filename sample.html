@@ -1,8 +1,23 @@
 <html>
 <head>
 	<title>Human Center of Mass</title>
+	<link rel="stylesheet" href="css/style.css">
 	<style>
-
+	@font-face {
+	  font-family: 'open-sans';
+	  font-weight:normal;
+	  src: url('font/OpenSans-Regular.ttf')  format('truetype'); /* Safari, Android, iOS */
+	}
+	@font-face {
+	  font-family: 'open-sans';
+	  font-weight: bold;
+	  src: url('font/OpenSans-Bold.ttf')  format('truetype'); /* Safari, Android, iOS */
+	}
+	@font-face {
+	  font-family: 'open-sans';
+	  font-weight: lighter;
+	  src: url('font/OpenSans-Light.ttf')  format('truetype'); /* Safari, Android, iOS */
+	}
 	</style>
 </head>
 <body>
@@ -16,6 +31,8 @@
 	<div id="wrapper">
 		<canvas id="imageCanvas"></canvas>
 	</div>
+	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>
 	<script type="text/javascript">
 
 		var loadButton = document.getElementById('loadButton');
@@ -46,7 +63,7 @@
 		        }
 		        img.src = event.target.result;
 		    }
-		    reader.readAsDataURL(e.target.files[0]);     
+		    reader.readAsDataURL(e.target.files[0]);
 		}
 
 	</script>

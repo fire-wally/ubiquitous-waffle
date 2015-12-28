@@ -55,6 +55,5 @@ function setupCanvas(){
     //Update stage will render next frame
     stage.update();
     easelElements['stage'] = stage;
-    alert('this ran');
 }
 setupCanvas();

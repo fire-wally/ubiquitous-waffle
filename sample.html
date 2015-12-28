@@ -16,10 +16,18 @@
 	<div id="wrapper">
 		<canvas id="imageCanvas"></canvas>
 	</div>
+
+	<button id="saveButton">Save</button>
+
+	<script type="text/javascript" src="canvas2image.js"></script>
 	<script type="text/javascript">
 
 		var loadButton = document.getElementById('loadButton');
 	    loadButton.addEventListener('change', handleImage, false);
+
+	    var saveButton = document.getElementById('saveButton');
+	    saveButton.addEventListener('click', saveImage, false);
+
 		var canvas = document.getElementById('imageCanvas');
 		var ctx = canvas.getContext('2d');
 
@@ -47,6 +55,10 @@
 		        img.src = event.target.result;
 		    }
 		    reader.readAsDataURL(e.target.files[0]);     
+		}
+
+		function saveImage(e){
+			Canvas2Image.saveAsPNG(canvas, canvas.width, canvas.height);
 		}
 
 	</script>

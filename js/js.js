@@ -7,7 +7,7 @@ var Segment = function(name) {
   this.endPt = {}
   this.COMMagnitude = 0.0;
   this.segmentMass = function(weight){
-    return this.segmentMagnitude * weight + this.weightOffset;
+    return this.weightMagnitude * weight + this.weightOffset;
   };
   this.segmentCOM = function(){
     return {
@@ -112,6 +112,53 @@ var Body = function() {
   }
 
 };
+
+var bodyTest = function(){
+  var b = new Body();
+  b.head.startPt = {x:6,y:2};
+  b.head.endPt = {x:6,y:4};
+
+  b.rightUpperArm.startPt = {x:4,y:5};
+  b.rightUpperArm.endPt = {x:2,y:7.5};
+
+  b.rightForearm.startPt = {x:2,y:7.5};
+  b.rightForearm.endPt = {x:1,y:10};
+
+  b.rightHand.startPt = {x:1, y:10};
+  b.rightHand.endPt = {x:0, y:12};
+
+  b.leftUpperArm.startPt = {x:8,y:5};
+  b.leftUpperArm.endPt = {x:10,y:7.5};
+
+  b.leftForearm.startPt = {x:10,y:7.5};
+  b.leftForearm.endPt = {x:12,y:10};
+
+  b.leftHand.startPt = {x:12, y:10};
+  b.leftHand.endPt = {x:13, y:12};
+
+  b.rightThigh.startPt = {x:5, y:11.5};
+  b.rightThigh.endPt = {x:4, y:14};
+
+  b.rightShank.startPt = {x:4,y:14};
+  b.rightShank.endPt = {x:3, y:15};
+
+  b.rightFoot.startPt = {x:3, y:15};
+  b.rightFoot.endPt = {x:2, y:16};
+
+  b.leftThigh.startPt = {x:7.5, y:11.5};
+  b.leftThigh.endPt = {x:8.5, y:14};
+
+  b.leftShank.startPt = {x:8.5,y:14};
+  b.leftShank.endPt = {x:9, y:15};
+
+  b.leftFoot.startPt = {x:9, y:15};
+  b.leftFoot.endPt = {x:9.5, y:16};
+
+  b.trunk.startPt = {x:6.5, y:6};
+  b.trunk.endPt = {x:6.5, y:10};
+
+  return b
+}
 
 var loadButton = document.getElementById('loadButton');
   loadButton.addEventListener('change', handleImage, false);

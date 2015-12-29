@@ -402,7 +402,7 @@ function setupNodes(){
   var node5 = new Node('Right Wrist', node4);
   var node6 = new Node('Right Hand', node5);
 
-  var node7 = new Node('Left Shoulder');
+  var node7 = new Node('Left Shoulder', node3);
   var node8 = new Node('Left Elbow', node7);
   var node9 = new Node('Left Wrist', node8);
   var node10 = new Node('Left Hand', node9);

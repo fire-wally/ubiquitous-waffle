@@ -19,6 +19,9 @@ var Segment = function(name) {
 };
 
 var Body = function() {
+
+  this.weight = 778 //In Newtons!
+
   this.head = new Segment("head");
   this.head.weightMagnitude = 0.032;
   this.head.weightOffset = 18.7;
@@ -88,11 +91,26 @@ var Body = function() {
   this.trunk.weightMagnitude = 0.532;
   this.trunk.weightOffset = -6.93;
   this.trunk.COMMagnitude = 0.4;
-
   this.segments = [this.head, this.rightUpperArm, this.rightForearm, this.rightHand,
-                    this.leftUpperArm, leftForearm, leftHand,
-                    rightThigh, rightShank, rightFoot,
-                    leftThigh, leftShank, leftFoot, trunk];
+                    this.leftUpperArm, this.leftForearm, this.leftHand,
+                    this.rightThigh, this.rightShank, this.rightFoot,
+                    this.leftThigh, this.leftShank, this.leftFoot, this.trunk];
+
+  this.centerOfMass = function(){
+    var xSum = 0.0;
+    var ySum = 0.0;
+    for(var i = 0; i<this.segments.lenth; i++){
+      var mass = this.segments[i].segmentMass(this.weight);
+      var com = this.segments[i].segmentCOM
+      xSum += mass * this.segments[i].com.x;
+      ySum += mass * this.segments[i].com.y
+    }
+    return {
+      x: xSum / this.weight,
+      y: ySum / this.weight
+    }
+  }
+
 };
 
 var loadButton = document.getElementById('loadButton');

@@ -6,13 +6,19 @@ var Segment = function(name) {
   this.startPt = {}
   this.endPt = {}
   this.COMMagnitude = 0.0;
+  this.setStart = function(node){
+    this.startPt = {x:node.x, y:node.y};
+  };
+  this.setEnd = function(node){
+    this.endPt = {x:node.x, y:node.y};
+  };
   this.segmentMass = function(weight){
     return this.weightMagnitude * weight + this.weightOffset;
   };
   this.segmentCOM = function(){
     return {
-      x: this.startPt.x + (this.COMMagnitude * (this.endPt.x - this.endPt.x)),
-      y: this.startPt.y + (this.COMMagnitude * (this.endPt.y - this.endPt.y)),
+      x: this.startPt.x + (this.COMMagnitude * (this.endPt.x - this.startPt.x)),
+      y: this.startPt.y + (this.COMMagnitude * (this.endPt.y - this.startPt.y)),
     };
   };
 
@@ -99,11 +105,11 @@ var Body = function() {
   this.centerOfMass = function(){
     var xSum = 0.0;
     var ySum = 0.0;
-    for(var i = 0; i<this.segments.lenth; i++){
+    for(var i = 0; i<this.segments.length; i++){
       var mass = this.segments[i].segmentMass(this.weight);
-      var com = this.segments[i].segmentCOM
-      xSum += mass * this.segments[i].com.x;
-      ySum += mass * this.segments[i].com.y
+      var com = this.segments[i].segmentCOM()
+      xSum += mass * com.x;
+      ySum += mass * com.y
     }
     return {
       x: xSum / this.weight,
@@ -161,12 +167,17 @@ var bodyTest = function(){
 }
 
 var loadButton = document.getElementById('loadButton');
-  loadButton.addEventListener('change', handleImage, false);
+loadButton.addEventListener('change', handleImage, false);
 
-  var saveButton = document.getElementById('saveButton');
-  saveButton.addEventListener('click', saveImage, false);
+var saveButton = document.getElementById('saveButton');
+saveButton.addEventListener('click', saveImage, false);
+
+var calcButton = document.getElementById('calculateButton');
+calcButton.addEventListener('click', calculateCOM, false);
 
 var canvas = document.getElementById('imageCanvas');
+canvas.width = 800;
+canvas.height = 600;
 var ctx = canvas.getContext('2d');
 
 function getSize(img){
@@ -181,18 +192,122 @@ function getSize(img){
 }
 
 function handleImage(e){
-    var reader = new FileReader();
-    reader.onload = function(event){
-        var img = new Image();
-        canvas.width = 800;
-        canvas.height = 600;
-        img.onload = function(){
-            var size = getSize(img);
-            ctx.drawImage(img,0,0, size.width, size.height);
-        }
-        img.src = event.target.result;
+  /*
+  var reader = new FileReader();
+  reader.onload = function(event){
+      var img = new Image();
+      img.onload = function(){
+          var size = getSize(img);
+          ctx.drawImage(img,0,0, size.width, size.height);
+      }
+      img.src = event.target.result;
+  }
+  reader.readAsDataURL(e.target.files[0]);
+  */
+  var bitmap = new createjs.Bitmap('derby.jpg');
+  stage.addChild(bitmap);
+  stage.update();
+}
+
+function calculateCOM(e){
+  var body = mapNodesToBody(allNodes);
+  var com = body.centerOfMass();
+
+  console.log(com);
+
+  var circle = new createjs.Shape();
+  circle.graphics.beginFill("blue").drawCircle(0, 0, 4);
+  circle.x = com.x;
+  circle.y  = com.y;
+  stage.addChild(circle); // add to stage
+  stage.update();
+
+}
+
+function mapNodesToBody(nodes){
+  var body = new Body();
+  for(var i = 0; i<nodes.length; i++){
+    var n = nodes[i];
+    switch (n.name){
+      case "topOfHead":
+        body.head.setStart(n);
+        break;
+      case "chinNeck":
+        body.head.setEnd(n);
+        break;
+      case "rightShoulder":
+        body.rightUpperArm.setStart(n);
+        break;
+      case "rightElbow":
+        body.rightUpperArm.setEnd(n);
+        body.rightForearm.setStart(n);
+        break;
+      case "rightWrist":
+        body.rightForearm.setEnd(n);
+        body.rightHand.setStart(n);
+        break;
+      case "rightHand":
+        body.rightHand.setEnd(n);
+        break;
+      case "leftShoulder":
+        body.leftUpperArm.setStart(n);
+        break;
+      case "leftElbow":
+        body.leftUpperArm.setEnd(n);
+        body.leftForearm.setStart(n);
+        break;
+      case "leftWrist":
+        body.leftForearm.setEnd(n);
+        body.leftHand.setStart(n);
+        break;
+      case "leftHand":
+        body.leftHand.setEnd(n);
+        break;
+      case "rightHip":
+        body.rightThigh.setStart(n);
+        break;
+      case "rightKnee":
+        body.rightThigh.setEnd(n);
+        body.rightShank.setStart(n);
+        break;
+      case "rightAnkle":
+        body.rightShank.setEnd(n);
+        body.rightFoot.setStart(n);
+        break;
+      case "right5thMet":
+        body.rightFoot.setEnd(n);
+        break;
+      case "leftHip":
+        body.leftThigh.setStart(n);
+        break;
+      case "leftKnee":
+        body.leftThigh.setEnd(n);
+        body.leftShank.setStart(n);
+        break;
+      case "leftAnkle":
+        body.leftShank.setEnd(n);
+        body.leftFoot.setStart(n);
+        break;
+      case "left5thMet":
+        body.leftFoot.setEnd(n);
+        break;
+      default:
+        console.log("unknown node", n);
+        break;
     }
-    reader.readAsDataURL(e.target.files[0]);
+
+  }
+  var hipMidPoint = {
+    x: body.leftThigh.startPt.x - ((body.leftThigh.startPt.x - body.rightThigh.startPt.x) / 2),
+    y: body.leftThigh.startPt.y - ((body.leftThigh.startPt.y - body.rightThigh.startPt.y) / 2)
+  };
+  var shoulderMidPoint = {
+    x: body.leftUpperArm.startPt.x - ((body.leftUpperArm.startPt.x - body.rightUpperArm.startPt.x) / 2),
+    y: body.leftUpperArm.startPt.y - ((body.leftUpperArm.startPt.y - body.rightUpperArm.startPt.y) / 2)
+  };
+  body.trunk.startPt = shoulderMidPoint;
+  body.trunk.endPt = hipMidPoint;
+  return body;
 }
 
 function saveImage(e){
@@ -218,7 +333,7 @@ var Node = function(name, connectTo) {
   this.y = 0.0;
   this.sprite = null;
   this.lineSprite = null;
-  this.name = '';
+  this.name = name;
   this.connectTo = connectTo;
   this.setCoordinates = function(x, y){
 
@@ -227,7 +342,7 @@ var Node = function(name, connectTo) {
 
     if (!this.sprite){
       var circle = new createjs.Shape();
-      circle.graphics.beginFill("red").drawCircle(0, 0, 4);
+      circle.graphics.beginFill("black").drawCircle(0, 0, 4);
       circle.x = x;
       circle.y  = y;
       this.sprite = circle;
@@ -235,7 +350,7 @@ var Node = function(name, connectTo) {
 
       if(this.connectTo){
         var line = new createjs.Shape();
-        line.graphics.beginStroke("blue")
+        line.graphics.beginStroke("pink")
         line.graphics.moveTo(this.x, this.y);
         line.graphics.lineTo(connectTo.x, connectTo.y);
         this.lineSprite = line;
@@ -251,7 +366,7 @@ var Node = function(name, connectTo) {
         // redraw line
         this.lineSprite.graphics = null;
         this.lineSprite.graphics = new createjs.Graphics();
-        line.graphics.beginStroke("blue")
+        line.graphics.beginStroke("pink")
         line.graphics.moveTo(this.x, this.y);
         line.graphics.lineTo(connectTo.x, connectTo.y);
       }
@@ -270,18 +385,28 @@ var Node = function(name, connectTo) {
 }
 
 function setupNodes(){
-  var node1 = new Node('name');
-  var node2 = new Node('name', node1);
-  var node3 = new Node('name', node2);
+  var node1 = new Node('topOfHead');
+  var node2 = new Node('chinNeck', node1);
 
-  var node4 = new Node('name');
-  var node5 = new Node('name', node4);
-  var node6 = new Node('name', node5);
-  var node7 = new Node('name', node6);
+  var node3 = new Node('rightShoulder');
+  var node4 = new Node('rightElbow', node3);
+  var node5 = new Node('rightWrist', node4);
+  var node6 = new Node('rightHand', node5);
 
-  var node8 = new Node('name', node3);
-  var node9 = new Node('name', node8);
-  var node10 = new Node('name', node10);
+  var node7 = new Node('leftShoulder');
+  var node8 = new Node('leftElbow', node7);
+  var node9 = new Node('leftWrist', node8);
+  var node10 = new Node('leftHand', node9);
+
+  var node11 = new Node('rightHip');
+  var node12 = new Node('rightKnee', node11);
+  var node13 = new Node('rightAnkle', node12);
+  var node14 = new Node('right5thMet', node13);
+
+  var node15 = new Node('leftHip', node11);
+  var node16 = new Node('leftKnee', node15);
+  var node17 = new Node('leftAnkle', node16);
+  var node18 = new Node('left5thMet', node17);
 
   allNodes.push(node1);
   allNodes.push(node2);
@@ -293,6 +418,15 @@ function setupNodes(){
   allNodes.push(node8);
   allNodes.push(node9);
   allNodes.push(node10);
+  allNodes.push(node11);
+  allNodes.push(node12);
+  allNodes.push(node13);
+  allNodes.push(node14);
+  allNodes.push(node15);
+  allNodes.push(node16);
+  allNodes.push(node17);
+  allNodes.push(node18);
+
 }
 setupNodes();
 

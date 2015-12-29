@@ -215,6 +215,7 @@ function loadSample(e){
   bitmap.scaleX = scaleRatio;
   stage.addChild(bitmap);
   stage.update();
+  updateMessage("Select the Top of Head");
 }
 
 function calculateCOM(e){

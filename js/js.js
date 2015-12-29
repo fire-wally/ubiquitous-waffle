@@ -208,15 +208,18 @@ function Coordinate(){
 
 
 var stage = new createjs.Stage("imageCanvas");
+//stage.setTransform(0, 0, 0, -1);
 var allCoordinates = [];
 var allNodes = [];
 var allLines = [];
 
-var Node = function(name) {
+var Node = function(name, connectTo) {
   this.x = 0.0;
   this.y = 0.0;
   this.sprite = null;
+  this.lineSprite = null;
   this.name = '';
+  this.connectTo = connectTo;
   this.setCoordinates = function(x, y){
 
     this.x = x;
@@ -229,26 +232,67 @@ var Node = function(name) {
       circle.y  = y;
       this.sprite = circle;
       stage.addChild(circle); // add to stage
-      stage.update(); // show the new circle
+
+      if(this.connectTo){
+        var line = new createjs.Shape();
+        line.graphics.beginStroke("blue")
+        line.graphics.moveTo(this.x, this.y);
+        line.graphics.lineTo(connectTo.x, connectTo.y);
+        this.lineSprite = line;
+        stage.addChild(line); // add to stage
+      }
+
+    }
+    else{
+      this.sprite.x = x;
+      this.sprite.y = y;
+
+      if(this.connectTo){
+        // redraw line
+        this.lineSprite.graphics = null;
+        this.lineSprite.graphics = new createjs.Graphics();
+        line.graphics.beginStroke("blue")
+        line.graphics.moveTo(this.x, this.y);
+        line.graphics.lineTo(connectTo.x, connectTo.y);
+      }
+
     }
 
+    stage.update(); // show the new circle
+
   };
+  this.getX = function (){
+    return this.x;
+  }
+  this.getY = function(){
+    return canvas.height - this.y
+  }
 }
 
 function setupNodes(){
-  allNodes.push(new Node('name'));
-  allNodes.push(new Node('name'));
-  allNodes.push(new Node('name'));
-  allNodes.push(new Node('name'));
-  allNodes.push(new Node('name'));
-  allNodes.push(new Node('name'));
-  allNodes.push(new Node('name'));
-  allNodes.push(new Node('name'));
-  allNodes.push(new Node('name'));
-  allNodes.push(new Node('name'));
-  allNodes.push(new Node('name'));
-  allNodes.push(new Node('name'));
-  allNodes.push(new Node('name'));
+  var node1 = new Node('name');
+  var node2 = new Node('name', node1);
+  var node3 = new Node('name', node2);
+
+  var node4 = new Node('name');
+  var node5 = new Node('name', node4);
+  var node6 = new Node('name', node5);
+  var node7 = new Node('name', node6);
+
+  var node8 = new Node('name', node3);
+  var node9 = new Node('name', node8);
+  var node10 = new Node('name', node10);
+
+  allNodes.push(node1);
+  allNodes.push(node2);
+  allNodes.push(node3);
+  allNodes.push(node4);
+  allNodes.push(node5);
+  allNodes.push(node6);
+  allNodes.push(node7);
+  allNodes.push(node8);
+  allNodes.push(node9);
+  allNodes.push(node10);
 }
 setupNodes();
 
@@ -266,6 +310,7 @@ function connectTheDots(dot1, dot2){
 
 
 function stageClick(evt){
+
   // find the next node without a sprite. break after finding that node.
   for (var i = 0; i < allNodes.length; i++){
     var node = allNodes[i];

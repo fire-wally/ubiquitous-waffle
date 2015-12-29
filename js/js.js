@@ -211,9 +211,12 @@ function calculateCOM(e){
   console.log(com);
 
   var circle = new createjs.Shape();
-  circle.graphics.beginFill("blue").drawCircle(0, 0, 4);
-  circle.x = com.x;
-  circle.y  = com.y;
+  circle.graphics.beginFill("lime").drawCircle(0, 0, 4);
+  var outline = new createjs.Shape();
+  outline.graphics.beginFill("black").drawCircle(0,0,5);
+  circle.x = outline.x = com.x;
+  circle.y  = outline.y = com.y;
+  stage.addChild(outline); // add to stage
   stage.addChild(circle); // add to stage
   stage.update();
 
@@ -345,15 +348,18 @@ var Node = function(name, connectTo) {
 
     if (!this.sprite){
       var circle = new createjs.Shape();
-      circle.graphics.beginFill("black").drawCircle(0, 0, 4);
-      circle.x = x;
-      circle.y  = y;
+      circle.graphics.beginFill("yellow").drawCircle(0, 0, 4);
+      var outline  = new createjs.Shape();
+      outline.graphics.beginFill("black").drawCircle(0,0,5);
+      circle.x = outline.x = x;
+      circle.y = outline.y = y;
       this.sprite = circle;
+      stage.addChild(outline);
       stage.addChild(circle); // add to stage
 
       if(this.connectTo){
         var line = new createjs.Shape();
-        line.graphics.beginStroke("pink")
+        line.graphics.setStrokeStyle(3).beginStroke("blue")
         line.graphics.moveTo(this.x, this.y);
         line.graphics.lineTo(connectTo.x, connectTo.y);
         this.lineSprite = line;
@@ -369,7 +375,7 @@ var Node = function(name, connectTo) {
         // redraw line
         this.lineSprite.graphics = null;
         this.lineSprite.graphics = new createjs.Graphics();
-        line.graphics.beginStroke("pink")
+        line.graphics.setStrokeStyle(3).beginStroke("blue")
         line.graphics.moveTo(this.x, this.y);
         line.graphics.lineTo(connectTo.x, connectTo.y);
       }

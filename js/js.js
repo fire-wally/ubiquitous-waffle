@@ -89,9 +89,9 @@ var Body = function() {
   this.trunk.weightOffset = -6.93;
   this.trunk.COMMagnitude = 0.4;
 
-  this.segments = [this.head, this.rightUpperArm, this.rightForearm, this.rightHand, 
+  this.segments = [this.head, this.rightUpperArm, this.rightForearm, this.rightHand,
                     this.leftUpperArm, leftForearm, leftHand,
-                    rightThigh, rightShank, rightFoot, 
+                    rightThigh, rightShank, rightFoot,
                     leftThigh, leftShank, leftFoot, trunk];
 };
 
@@ -140,14 +140,54 @@ function Coordinate(){
   return {x:0,y:0}
 }
 
+
+
 var stage = new createjs.Stage("imageCanvas");
 var allCoordinates = [];
-var allCircles = [];
+var allNodes = [];
 var allLines = [];
 
+var Node = function(name) {
+  this.x = 0.0;
+  this.y = 0.0;
+  this.sprite = null;
+  this.name = '';
+  this.setCoordinates = function(x, y){
+
+    this.x = x;
+    this.y = y;
+
+    if (!this.sprite){
+      var circle = new createjs.Shape();
+      circle.graphics.beginFill("red").drawCircle(0, 0, 4);
+      circle.x = x;
+      circle.y  = y;
+      this.sprite = circle;
+      stage.addChild(circle); // add to stage
+      stage.update(); // show the new circle
+    }
+
+  };
+}
+
+function setupNodes(){
+  allNodes.push(new Node('name'));
+  allNodes.push(new Node('name'));
+  allNodes.push(new Node('name'));
+  allNodes.push(new Node('name'));
+  allNodes.push(new Node('name'));
+  allNodes.push(new Node('name'));
+  allNodes.push(new Node('name'));
+  allNodes.push(new Node('name'));
+  allNodes.push(new Node('name'));
+  allNodes.push(new Node('name'));
+  allNodes.push(new Node('name'));
+  allNodes.push(new Node('name'));
+  allNodes.push(new Node('name'));
+}
+setupNodes();
+
 function connectTheDots(dot1, dot2){
-  console.log(dot1.x);
-  console.log(dot2.x);
 
   var line = new createjs.Shape();
   line.graphics.beginStroke("blue")
@@ -159,32 +199,15 @@ function connectTheDots(dot1, dot2){
   allLines.push(line);
 }
 
-function makeACircle(x, y, connectToPrevious){
-  // Add a circle at the point of user click
-  var circle = new createjs.Shape();
-  circle.graphics.beginFill("red").drawCircle(0, 0, 4);
-  circle.x = x;
-  circle.y = y;
-
-  // connect this circle to the previous circle with a line.
-  if (allCircles.length > 0 && connectToPrevious){
-    connectTheDots(allCircles[allCircles.length - 1], circle);
-  }
-
-  allCircles.push(circle) // add circle to list of circles so we can connect the dots later
-
-  stage.addChild(circle); // add to stage
-  stage.update(); // show the new circle
-}
 
 function stageClick(evt){
-
-  var coordinate = Coordinate();
-  coordinate.x = evt.stageX;
-  coordinate.y = evt.stageY;
-  allCoordinates.push(coordinate);
-
-  makeACircle(evt.stageX, evt.stageY, true); // this last boolean draws a line to previous circle
-
+  // find the next node without a sprite. break after finding that node.
+  for (var i = 0; i < allNodes.length; i++){
+    var node = allNodes[i];
+    if (!node.sprite){
+      node.setCoordinates(evt.stageX, evt.stageY);
+      break;
+    }
+  }
 }
 stage.on("stagemousedown", stageClick);

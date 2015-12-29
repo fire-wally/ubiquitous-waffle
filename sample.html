@@ -23,17 +23,22 @@
 <body>
 	<h1>Human Center of Mass</h1>
 
-	<p>Click the button to choose an image from your computer</p>
+	<p id="message">Click the button to choose an image from your computer</p>
 
 	<label for="loadButton">Image File:</label>
 	<input type="file" id="loadButton" name="loadButton" />
+
+	<div id="buttons">
+		<button id="calculateButton">Calculate</button>
+		<button id="saveButton">Save</button>
+		<button id="resetButton">Reset</button>
+	</div>
 
 	<div id="wrapper">
 		<canvas id="imageCanvas"></canvas>
 	</div>
 
-	<button id="calculateButton">Calculate</button>
-	<button id="saveButton">Save</button>
+	
 
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script src="https://code.createjs.com/easeljs-0.8.2.min.js"></script>

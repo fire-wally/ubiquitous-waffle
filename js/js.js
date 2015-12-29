@@ -1,5 +1,5 @@
 // js goes here
-var Segment = function(name) {
+var Segment = function() {
   this.segmentName = name;
   this.weightMagnitude = 0.0;
   this.weightOffset = 0.0;
@@ -172,6 +172,9 @@ loadButton.addEventListener('change', handleImage, false);
 var saveButton = document.getElementById('saveButton');
 saveButton.addEventListener('click', saveImage, false);
 
+var resetButton = document.getElementById('resetButton');
+resetButton.addEventListener('click', resetEverything, false);
+
 var calcButton = document.getElementById('calculateButton');
 calcButton.addEventListener('click', calculateCOM, false);
 
@@ -198,7 +201,7 @@ function handleImage(e){
       img.src = event.target.result;
   }
   reader.readAsDataURL(e.target.files[0]);
-
+  updateMessage("Select the Top of Head");
 }
 
 function calculateCOM(e){
@@ -221,66 +224,66 @@ function mapNodesToBody(nodes){
   for(var i = 0; i<nodes.length; i++){
     var n = nodes[i];
     switch (n.name){
-      case "topOfHead":
+      case "Top of Head":
         body.head.setStart(n);
         break;
-      case "chinNeck":
+      case "Chin-Neck Intersect":
         body.head.setEnd(n);
         break;
-      case "rightShoulder":
+      case "Right Shoulder":
         body.rightUpperArm.setStart(n);
         break;
-      case "rightElbow":
+      case "Right Elbow":
         body.rightUpperArm.setEnd(n);
         body.rightForearm.setStart(n);
         break;
-      case "rightWrist":
+      case "Right Wrist":
         body.rightForearm.setEnd(n);
         body.rightHand.setStart(n);
         break;
-      case "rightHand":
+      case "Right Hand":
         body.rightHand.setEnd(n);
         break;
-      case "leftShoulder":
+      case "Left Shoulder":
         body.leftUpperArm.setStart(n);
         break;
-      case "leftElbow":
+      case "Left Elbow":
         body.leftUpperArm.setEnd(n);
         body.leftForearm.setStart(n);
         break;
-      case "leftWrist":
+      case "Left Wrist":
         body.leftForearm.setEnd(n);
         body.leftHand.setStart(n);
         break;
-      case "leftHand":
+      case "Left Hand":
         body.leftHand.setEnd(n);
         break;
-      case "rightHip":
+      case "Right Hip":
         body.rightThigh.setStart(n);
         break;
-      case "rightKnee":
+      case "Right Knee":
         body.rightThigh.setEnd(n);
         body.rightShank.setStart(n);
         break;
-      case "rightAnkle":
+      case "Right Ankle":
         body.rightShank.setEnd(n);
         body.rightFoot.setStart(n);
         break;
-      case "right5thMet":
+      case "Right Fifth Metatarsil":
         body.rightFoot.setEnd(n);
         break;
-      case "leftHip":
+      case "Left Hip":
         body.leftThigh.setStart(n);
         break;
-      case "leftKnee":
+      case "Left Knee":
         body.leftThigh.setEnd(n);
         body.leftShank.setStart(n);
         break;
-      case "leftAnkle":
+      case "Left Ankle":
         body.leftShank.setEnd(n);
         body.leftFoot.setStart(n);
         break;
-      case "left5thMet":
+      case "Left Fifth Metatarsil":
         body.leftFoot.setEnd(n);
         break;
       default:
@@ -306,6 +309,14 @@ function saveImage(e){
   canvas.toBlob(function(blob) {
     saveAs(blob, "center-of-mass.png");
   });
+}
+
+function resetEverything(){
+  stage.removeAllChildren();
+  stage.update();
+  allNodes = [];
+  setupNodes();
+  updateMessage("Click the button to choose an image from your computer");
 }
 
 function Coordinate(){
@@ -377,28 +388,28 @@ var Node = function(name, connectTo) {
 }
 
 function setupNodes(){
-  var node1 = new Node('topOfHead');
-  var node2 = new Node('chinNeck', node1);
+  var node1 = new Node('Top of Head');
+  var node2 = new Node('Chin-Neck Intersect', node1);
 
-  var node3 = new Node('rightShoulder');
-  var node4 = new Node('rightElbow', node3);
-  var node5 = new Node('rightWrist', node4);
-  var node6 = new Node('rightHand', node5);
+  var node3 = new Node('Right Shoulder');
+  var node4 = new Node('Right Elbow', node3);
+  var node5 = new Node('Right Wrist', node4);
+  var node6 = new Node('Right Hand', node5);
 
-  var node7 = new Node('leftShoulder');
-  var node8 = new Node('leftElbow', node7);
-  var node9 = new Node('leftWrist', node8);
-  var node10 = new Node('leftHand', node9);
+  var node7 = new Node('Left Shoulder');
+  var node8 = new Node('Left Elbow', node7);
+  var node9 = new Node('Left Wrist', node8);
+  var node10 = new Node('Left Hand', node9);
 
-  var node11 = new Node('rightHip');
-  var node12 = new Node('rightKnee', node11);
-  var node13 = new Node('rightAnkle', node12);
-  var node14 = new Node('right5thMet', node13);
+  var node11 = new Node('Right Hip');
+  var node12 = new Node('Right Knee', node11);
+  var node13 = new Node('Right Ankle', node12);
+  var node14 = new Node('Right Fifth Metatarsil', node13);
 
-  var node15 = new Node('leftHip', node11);
-  var node16 = new Node('leftKnee', node15);
-  var node17 = new Node('leftAnkle', node16);
-  var node18 = new Node('left5thMet', node17);
+  var node15 = new Node('Left Hip', node11);
+  var node16 = new Node('Left Knee', node15);
+  var node17 = new Node('Left Ankle', node16);
+  var node18 = new Node('Left Fifth Metatarsil', node17);
 
   allNodes.push(node1);
   allNodes.push(node2);
@@ -434,16 +445,26 @@ function connectTheDots(dot1, dot2){
   allLines.push(line);
 }
 
+function updateMessage(newMsg){
+  $('#message').text(newMsg);
+}
+
 
 function stageClick(evt){
 
   // find the next node without a sprite. break after finding that node.
+  var foundIndex = -1;
   for (var i = 0; i < allNodes.length; i++){
     var node = allNodes[i];
     if (!node.sprite){
       node.setCoordinates(evt.stageX, evt.stageY);
+      foundIndex = i;
       break;
     }
   }
+  if (foundIndex < allNodes.length - 1)
+    updateMessage("Select The " + allNodes[foundIndex +1].name);
+  else if (foundIndex == allNodes.length - 1)
+    updateMessage("All Nodes Entered. Click Calculate and then Save");
 }
 stage.on("stagemousedown", stageClick);

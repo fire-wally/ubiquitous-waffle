@@ -210,6 +210,14 @@ function calculateCOM(e){
 
   console.log(com);
 
+  //draw the trunk segment
+  var trunkLine = new createjs.Shape();
+  trunkLine.graphics.setStrokeStyle(3).beginStroke("blue")
+  trunkLine.graphics.moveTo(body.trunk.startPt.x, body.trunk.startPt.y);
+  trunkLine.graphics.lineTo(body.trunk.endPt.x, body.trunk.endPt.y);
+  stage.addChild(trunkLine);
+
+
   var circle = new createjs.Shape();
   circle.graphics.beginFill("lime").drawCircle(0, 0, 4);
   var outline = new createjs.Shape();

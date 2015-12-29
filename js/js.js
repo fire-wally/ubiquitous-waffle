@@ -169,6 +169,9 @@ var bodyTest = function(){
 var loadButton = document.getElementById('loadButton');
 loadButton.addEventListener('change', handleImage, false);
 
+var sampleButton = document.getElementById('sampleButton');
+sampleButton.addEventListener('click', loadSample, false);
+
 var saveButton = document.getElementById('saveButton');
 saveButton.addEventListener('click', saveImage, false);
 
@@ -202,6 +205,16 @@ function handleImage(e){
   }
   reader.readAsDataURL(e.target.files[0]);
   updateMessage("Select the Top of Head");
+}
+
+function loadSample(e){
+  var bitmap = new createjs.Bitmap("derby.jpg");
+  var longDimension = bitmap.height > bitmap.width ? bitmap.height : bitmap.width;
+  var scaleRatio = 700 / longDimension;
+  bitmap.scaleY = scaleRatio;
+  bitmap.scaleX = scaleRatio;
+  stage.addChild(bitmap);
+  stage.update();
 }
 
 function calculateCOM(e){

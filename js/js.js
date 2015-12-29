@@ -176,37 +176,29 @@ var calcButton = document.getElementById('calculateButton');
 calcButton.addEventListener('click', calculateCOM, false);
 
 var canvas = document.getElementById('imageCanvas');
-canvas.width = 800;
+canvas.width = 600;
 canvas.height = 600;
 var ctx = canvas.getContext('2d');
 
-function getSize(img){
-  var imgWidth = img.width;
-  var imgHeight = img.height;
-  if (imgHeight <= 800 && imgWidth <= 800)
-    return {height: imgHeight, width: imgWidth};
-  else if (imgWidth > imgHeight) //if landscape
-    return {height: 600, width: 800};
-  else
-    return {height: 800, width: 600};
-}
 
 function handleImage(e){
-  /*
+
   var reader = new FileReader();
   reader.onload = function(event){
       var img = new Image();
       img.onload = function(){
-          var size = getSize(img);
-          ctx.drawImage(img,0,0, size.width, size.height);
+        var bitmap = new createjs.Bitmap(img);
+        var longDimension = img.height > img.width ? img.height : img.width;
+        var scaleRatio = 700 / longDimension;
+        bitmap.scaleY = scaleRatio;
+        bitmap.scaleX = scaleRatio;
+        stage.addChild(bitmap);
+        stage.update();
       }
       img.src = event.target.result;
   }
   reader.readAsDataURL(e.target.files[0]);
-  */
-  var bitmap = new createjs.Bitmap('derby.jpg');
-  stage.addChild(bitmap);
-  stage.update();
+
 }
 
 function calculateCOM(e){

@@ -161,6 +161,7 @@ function Coordinate(){
 
 
 var stage = new createjs.Stage("imageCanvas");
+//stage.setTransform(0, 0, 0, -1);
 var allCoordinates = [];
 var allNodes = [];
 var allLines = [];
@@ -186,6 +187,12 @@ var Node = function(name) {
     }
 
   };
+  this.getX = function (){
+    return this.x;
+  }
+  this.getY = function(){
+    return canvas.height - this.y
+  }
 }
 
 function setupNodes(){
@@ -219,6 +226,7 @@ function connectTheDots(dot1, dot2){
 
 
 function stageClick(evt){
+
   // find the next node without a sprite. break after finding that node.
   for (var i = 0; i < allNodes.length; i++){
     var node = allNodes[i];

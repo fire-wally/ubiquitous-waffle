@@ -1,5 +1,7 @@
 # ubiquitous-waffle
-My brother and I are making a quick thing for our dad while we're here on vacation 
+My Brother and I made this to help our dad do an online demonstration of human-body Center of Mass for his biomechanics students. 
+
+The app steps students through identifying segments of the human body in a photo and then calculates a likely center of mass from the photo. 
 
 # Requirements
 

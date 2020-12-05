@@ -9,7 +9,7 @@ The app steps students through identifying segments of the human body in a photo
 
 # Live Demo
 
-There's a hosted version here on Netlify, that may very well be working when you read this: https://dreamy-benz-b3c613.netlify.app/sample.html
+There's a hosted version here on Netlify: https://dreamy-benz-b3c613.netlify.app/sample.html
 
 # Requirements
 

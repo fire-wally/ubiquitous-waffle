@@ -3,6 +3,10 @@ My Brother and I made this to help our dad do an online demonstration of human-b
 
 The app steps students through identifying segments of the human body in a photo and then calculates a likely center of mass from the photo. 
 
+# Example Output
+
+![Photo of a person roller skating, but their joints have been overlayed with yellow dots and blue skeleton lines. A Green dot shows their center of mass as calculated by the app in this repository](https://raw.githubusercontent.com/fire-wally/ubiquitous-waffle/master/center-of-mass(3).png)
+
 # Requirements
 
 * User can choose a picture from their PC

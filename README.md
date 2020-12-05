@@ -7,6 +7,10 @@ The app steps students through identifying segments of the human body in a photo
 
 ![Photo of a person roller skating, but their joints have been overlayed with yellow dots and blue skeleton lines. A Green dot shows their center of mass as calculated by the app in this repository](https://raw.githubusercontent.com/fire-wally/ubiquitous-waffle/master/center-of-mass(3).png)
 
+# Live Demo
+
+There's a hosted version here on Netlify, that may very well be working when you read this: https://dreamy-benz-b3c613.netlify.app/sample.html
+
 # Requirements
 
 * User can choose a picture from their PC
